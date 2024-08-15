@@ -43,7 +43,7 @@ fun NavigationComponent(navController: NavHostController, modifier: Modifier = M
         composable("main") { MainScreen(navController) }
         composable("screen1") { Screen1() }
         composable("screen2") { Screen2() }
-        composable("screen3") { Screen3() }
+        composable("screen3") { Screen3(navController) }
         composable("screen3_1") { Screen3_1() }
         composable("screen3_2") { Screen3_2() }
 
