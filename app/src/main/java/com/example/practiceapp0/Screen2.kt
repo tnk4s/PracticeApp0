@@ -3,9 +3,7 @@ package com.example.practiceapp0
 import android.media.RingtoneManager
 import android.os.CountDownTimer
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,12 +11,47 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 import com.example.practiceapp0.ui.theme.PracticeApp0Theme
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Screen2() {
-    var timeInput by remember { mutableStateOf(TextFieldValue("10")) }
-    var timeRemaining by remember { mutableStateOf(10L) }
+    val pagerState = rememberPagerState()
+    val coroutineScope = rememberCoroutineScope()
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        // タブの作成
+        TabRow(selectedTabIndex = pagerState.currentPage) {
+            Tab(text = { Text("タイマー") }, selected = pagerState.currentPage == 0, onClick = {
+                coroutineScope.launch { pagerState.animateScrollToPage(0) }
+            })
+            Tab(text = { Text("3-2") }, selected = pagerState.currentPage == 1, onClick = {
+                coroutineScope.launch { pagerState.animateScrollToPage(1) }
+            })
+            Tab(text = { Text("3-3") }, selected = pagerState.currentPage == 2, onClick = {
+                coroutineScope.launch { pagerState.animateScrollToPage(2) }
+            })
+        }
+
+        // ページの作成
+        HorizontalPager(count = 3, state = pagerState) { page ->
+            when (page) {
+                0 -> TimerScreen()
+                1 -> TextScreen("3-2")
+                2 -> TextScreen("3-3")
+            }
+        }
+    }
+}
+
+@Composable
+fun TimerScreen() {
+    var timeInput by remember { mutableStateOf(TextFieldValue("5")) }
+    var timeRemaining by remember { mutableStateOf(5L) }
     var isRunning by remember { mutableStateOf(false) }
     var timer: CountDownTimer? by remember { mutableStateOf(null) }
 
@@ -72,6 +105,16 @@ fun Screen2() {
                 Text(if (isRunning) "リセット" else "スタート")
             }
         }
+    }
+}
+
+@Composable
+fun TextScreen(text: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = text)
     }
 }
 
