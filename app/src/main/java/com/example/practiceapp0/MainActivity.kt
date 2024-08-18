@@ -46,7 +46,10 @@ fun NavigationComponent(navController: NavHostController, modifier: Modifier = M
         composable("screen3") { Screen3(navController) }
         composable("screen3_1") { Screen3_1() }
         composable("screen3_2") { Screen3_2(navController) }
-
+        composable("spotDetail/{spotId}") { backStackEntry ->
+            val spotId = backStackEntry.arguments?.getString("spotId")
+            SpotDetailScreen(spotId)
+        }
     }
 }
 
