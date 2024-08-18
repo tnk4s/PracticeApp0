@@ -19,7 +19,7 @@ fun Screen3_2(navController: NavHostController) {
 
     // CameraPositionState の設定
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(initialLocation, 10f)
+        position = CameraPosition.fromLatLngZoom(initialLocation, 12f)
     }
 
     GoogleMap(
