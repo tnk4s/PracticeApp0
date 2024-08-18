@@ -3,6 +3,7 @@ package com.example.practiceapp0
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,13 +25,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.practiceapp0.ui.theme.PracticeApp0Theme
 
 class MainActivity : ComponentActivity() {
+    private val spotViewModel: SpotViewModel by viewModels() // MainActivityスコープでViewModelを作成
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PracticeApp0Theme {
                 val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavigationComponent(navController, Modifier.padding(innerPadding))
+                    NavigationComponent(navController, spotViewModel, Modifier.padding(innerPadding))
                 }
             }
         }
@@ -38,17 +41,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavigationComponent(navController: NavHostController, modifier: Modifier = Modifier) {
+fun NavigationComponent(navController: NavHostController, spotViewModel: SpotViewModel, modifier: Modifier = Modifier) {
     NavHost(navController = navController, startDestination = "main") {
         composable("main") { MainScreen(navController) }
         composable("screen1") { Screen1() }
         composable("screen2") { Screen2() }
-        composable("screen3") { Screen3(navController) }
+        composable("screen3") { Screen3(navController, spotViewModel) }
         composable("screen3_1") { Screen3_1() }
-        composable("screen3_2") { Screen3_2(navController) }
+        composable("screen3_2") { Screen3_2(navController, spotViewModel) }
         composable("spotDetail/{spotId}") { backStackEntry ->
             val spotId = backStackEntry.arguments?.getString("spotId")
-            SpotDetailScreen(navController, spotId)
+            SpotDetailScreen(navController, spotId, spotViewModel)
         }
     }
 }

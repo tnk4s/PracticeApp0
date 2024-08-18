@@ -15,13 +15,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.maps.model.LatLng
 import com.example.practiceapp0.ui.theme.PracticeApp0Theme
 
 @Composable
-fun SpotDetailScreen(navController: NavController, spotId: String?) {
-    var rating by remember { mutableStateOf(0) }  // 現在の評価を保持する状態
+fun SpotDetailScreen(navController: NavController, spotId: String?, viewModel: SpotViewModel) {
+    var rating by remember { mutableStateOf(0) }  // 星1をデフォルトに設定
+    println("SpotDetailScreen ViewModel instance: ${viewModel.hashCode()}")
 
     Column(
         modifier = Modifier
@@ -62,7 +65,12 @@ fun SpotDetailScreen(navController: NavController, spotId: String?) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            // 登録、レビュー、評価を行う機能を追加
+            spotId?.let {
+                // spotId を LatLng に変換して ViewModel に追加
+                val latLng = LatLng(it.split(",")[0].toDouble(), it.split(",")[1].toDouble())
+                viewModel.addRatedSpot(latLng)
+                println("Added spot: $latLng")  // 追加されたスポットの座標を確認
+            }
             navController.popBackStack()  // 前のページに戻る
         }) {
             Text("Register or Review")
@@ -73,8 +81,10 @@ fun SpotDetailScreen(navController: NavController, spotId: String?) {
 @Preview(showBackground = true)
 @Composable
 fun SpotDetailScreenPreview() {
-    val navController = rememberNavController()  // プレビュー用のNavControllerを作成
+    val navController = rememberNavController()
+    val viewModel: SpotViewModel = viewModel()  // プレビュー用にViewModelを作成
+
     PracticeApp0Theme {
-        SpotDetailScreen(navController, spotId = "123")
+        SpotDetailScreen(navController, spotId = "35.6895,139.6917", viewModel = viewModel)
     }
 }

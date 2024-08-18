@@ -11,9 +11,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.practiceapp0.ui.theme.PracticeApp0Theme
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun Screen3(navController: NavHostController) {
+fun Screen3(navController: NavHostController, viewModel: SpotViewModel) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -41,6 +42,7 @@ fun Screen3(navController: NavHostController) {
 fun Screen3Preview() {
     PracticeApp0Theme {
         val navController = rememberNavController()  // Preview 用の navController
-        Screen3(navController)
+        val viewModel: SpotViewModel = viewModel()  // プレビュー用のViewModelを作成
+        Screen3(navController, viewModel)
     }
 }
