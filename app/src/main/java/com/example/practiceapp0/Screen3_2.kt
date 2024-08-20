@@ -1,10 +1,14 @@
 package com.example.practiceapp0
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.dp  // これを追加します
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.practiceapp0.ui.theme.PracticeApp0Theme
@@ -24,7 +28,7 @@ fun Screen3_2(navController: NavHostController, viewModel: SpotViewModel) {
         position = CameraPosition.fromLatLngZoom(initialLocation, 12f)
     }
 
-    GoogleMap(
+    Column(
         modifier = Modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState,
         onMapClick = { latLng ->
@@ -38,19 +42,32 @@ fun Screen3_2(navController: NavHostController, viewModel: SpotViewModel) {
             snippet = "これはリラックスするのに良い場所です"
         )
 
-        // 評価されたスポットにピンを立てる
-        viewModel.ratedSpots.forEach { spot ->
-            println("Displaying spot: $spot")  // 表示されるスポットの座標を確認
-            Marker(
-                position = spot,
-                title = "Rated Spot",
-                snippet = "This spot was rated"
-            )
+            // 評価されたスポットにピンを立てる
+            viewModel.ratedSpots.forEach { spot ->
+                println("Displaying spot: $spot")  // 表示されるスポットの座標を確認
+                Marker(
+                    position = spot,
+                    title = "Rated Spot",
+                    snippet = "This spot was rated"
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))  // スペースの作成
+
+        Button(
+            onClick = {
+                // 画面2へ
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "新しいスポットを追加")
         }
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable
